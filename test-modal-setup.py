@@ -2,7 +2,7 @@ import sys
 
 import modal
 
-app = modal.App("example-hello-world")
+app = modal.App("test-modal-setup")
 
 
 @app.function()

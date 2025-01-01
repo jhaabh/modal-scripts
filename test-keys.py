@@ -1,3 +1,5 @@
+# test-keys.py
+
 import os
 import modal
 
@@ -35,7 +37,7 @@ image = (
 )
 
 # Define the Modal app.
-app = modal.App(name="modal-setup-test", image=image)
+app = modal.App(name="test-keys", image=image)
 
 
 # === TEST FUNCTION ===

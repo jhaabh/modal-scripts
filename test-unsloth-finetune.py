@@ -3,7 +3,7 @@ import os
 import modal
 
 # Reuse the same image from your images.py
-from images import UNSLOTH_FINETUNE_IMAGE
+from images import UNSLOTH_IMAGE
 
 # Configuration
 MODEL_NAME = "unsloth/Llama-3.2-1B-Instruct-bnb-4bit"
@@ -13,7 +13,7 @@ VOLUME_NAME = "unsloth-model-cache"
 MODELS_DIR = "/models"
 
 volume = modal.Volume.from_name(VOLUME_NAME, create_if_missing=True)
-image = UNSLOTH_FINETUNE_IMAGE
+image = UNSLOTH_IMAGE
 
 app = modal.App(name="test-unsloth-finetune", image=image)
 
@@ -125,6 +125,8 @@ def train_and_save(
 
     # 5) Create a DataCollator
     data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True)
+
+    print("BF16 supported: ", is_bfloat16_supported())
 
     # 6) Setup training arguments
     training_args = TrainingArguments(

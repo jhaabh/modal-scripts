@@ -2,11 +2,13 @@
 
 import os
 import modal
+import time
 
 from images import UNSLOTH_IMAGE
 
 # Configuration
-MODEL_NAME = "unsloth/Llama-3.2-1B-Instruct-bnb-4bit"
+# MODEL_NAME = "unsloth/Llama-3.2-1B-Instruct-bnb-4bit"
+MODEL_NAME = "unsloth/Qwen2.5-14B-Instruct-bnb-4bit"
 HUGGINGFACE_SECRET_NAME = "huggingface-secret"
 VOLUME_NAME = "unsloth-model-cache"
 MODELS_DIR = "/models"
@@ -19,7 +21,7 @@ app = modal.App(name="test-unsloth-inference", image=image)
 
 
 @app.function(
-    gpu="T4",
+    gpu="L40S",
     volumes={MODELS_DIR: volume},
     secrets=[modal.Secret.from_name(HUGGINGFACE_SECRET_NAME)],
     timeout=1800,
@@ -100,6 +102,7 @@ def generate_with_unsloth(model_name, prompt):
     print(f"Loading model: {model_name}...")
 
     # Load the model with Unsloth's FastLanguageModel
+    start_download = time.perf_counter()
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=model_name,
         token=os.getenv(
@@ -107,10 +110,14 @@ def generate_with_unsloth(model_name, prompt):
         ),  # Ensure your HuggingFace token is set in the environment
         load_in_4bit=True,  # Utilize 4-bit quantization for memory efficiency
     )
+    end_download = time.perf_counter()
+    download_time_sec = end_download - start_download
+    print(f"Download time: {download_time_sec}")
 
     # Apply the appropriate chat template
     # Supports zephyr, chatml, mistral, llama, alpaca, vicuna, vicuna_old, unsloth
     chat_template = "llama-3.1"  # Specify the correct template for the model
+    chat_template = "qwen25"
     tokenizer = get_chat_template(tokenizer, chat_template=chat_template)
 
     print("\nPreparing for inference...")

@@ -1,6 +1,6 @@
 import modal
 
-MODELS_DIR = "/models"
+HF_CACHE_DIR = "/models"
 
 UNSLOTH_IMAGE = (
     modal.Image.from_registry("pytorch/pytorch:2.5.1-cuda12.1-cudnn9-devel")
@@ -14,7 +14,7 @@ UNSLOTH_IMAGE = (
     .pip_install("huggingface_hub", "hf-transfer", "wandb")
     .env(
         {
-            "HUGGINGFACE_HUB_CACHE": MODELS_DIR,
+            "HUGGINGFACE_HUB_CACHE": HF_CACHE_DIR,
             "HF_HUB_ENABLE_HF_TRANSFER": "1",
         }
     )
@@ -40,7 +40,7 @@ UNSLOTH_IMAGE_OLD = (
     .pip_install("huggingface_hub", "hf-transfer", "wandb")
     .env(
         {
-            "HUGGINGFACE_HUB_CACHE": MODELS_DIR,
+            "HUGGINGFACE_HUB_CACHE": HF_CACHE_DIR,
             "HF_HUB_ENABLE_HF_TRANSFER": "1",
         }
     )
@@ -66,7 +66,7 @@ UNSLOTH_IMAGE_CONDA = (
     )
     .env(
         {
-            "HUGGINGFACE_HUB_CACHE": MODELS_DIR,
+            "HUGGINGFACE_HUB_CACHE": HF_CACHE_DIR,
             "HF_HUB_ENABLE_HF_TRANSFER": "1",
         }
     )
